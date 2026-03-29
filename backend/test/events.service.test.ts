@@ -23,7 +23,6 @@ describe('EventsService', () => {
     let transactionCalls = 0;
 
     const service = new EventsService(
-      { del: async () => undefined } as never,
       {
         withTransaction: async () => {
           transactionCalls += 1;
@@ -42,14 +41,8 @@ describe('EventsService', () => {
 
   test('does not apply rollups or invalidate cache when the insert conflicts', async () => {
     let rollupCalls = 0;
-    let cacheInvalidations = 0;
 
     const service = new EventsService(
-      {
-        del: async () => {
-          cacheInvalidations += 1;
-        },
-      } as never,
       {
         withTransaction: async (
           operation: (client: unknown) => Promise<unknown>,
@@ -72,6 +65,5 @@ describe('EventsService', () => {
     );
 
     expect(rollupCalls).toBe(0);
-    expect(cacheInvalidations).toBe(0);
   });
 });

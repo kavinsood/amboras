@@ -15,8 +15,8 @@ Build a fast, locally runnable analytics dashboard using Bun, Next.js, NestJS, P
 2. Event ingestion accepts validated event payloads.
 3. Backend persists the raw event to `events`.
 4. Backend updates aggregate rows in `store_daily_metrics` and `product_daily_revenue`.
-5. Backend invalidates Redis cache keys for the affected store.
-6. Dashboard fetches overview, top products, and recent activity from analytics endpoints.
+5. Aggregate endpoints use short-lived Redis cache entries for repeated reads, while recent activity hits the indexed raw events table directly.
+6. Dashboard fetches overview, top products, trend data, and recent activity from analytics endpoints.
 
 ## Scope Rules
 - One reporting currency per store for MVP.

@@ -79,7 +79,7 @@ bun run dev
 ### Real-time vs. Batch Processing
 - Decision: near-real-time writes with synchronous raw event inserts, transactional rollup upserts, and short-lived Redis caching for repeated reads.
 - Why: at the assignment scale, PostgreSQL can comfortably handle this workload without introducing a queue or separate streaming system. This keeps the implementation simple while still feeling real-time.
-- Trade-offs: this is simpler than a buffered micro-batch pipeline, but it does a little more work on the write path. If ingestion volume increased significantly, a Redis-backed queue/worker would be the next evolution.
+- Trade-offs: this is simpler than a buffered micro-batch pipeline, but it does a little more work on the write path. Aggregate reads are intentionally allowed to be a few seconds stale so short cache TTLs can stay effective without per-event invalidation. If ingestion volume increased significantly, a Redis-backed queue/worker would be the next evolution.
 
 ### Frontend Data Fetching
 - Decision: login stores a JWT locally, then the dashboard uses zero-dependency manual HTTP polling for fresh data.
@@ -94,7 +94,8 @@ bun run dev
   - `events(store_id, event_type, occurred_at DESC)`
 - Unique `event_id` for idempotency
 - Pre-aggregated daily rollup tables for overview and top-products
-- Redis cache for overview and top-products with short TTLs
+- PostgreSQL-native timezone bucketing in the rollup upserts using `AT TIME ZONE ... ::date`
+- Redis cache for overview, top-products, and trend with short TTLs
 - Recent activity stays a bounded indexed query with `LIMIT 20`
 - Backend guards derive tenant scope from the authenticated user context instead of trusting a `store_id` query parameter
 

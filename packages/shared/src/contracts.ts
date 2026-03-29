@@ -5,6 +5,11 @@ export type EventType =
   | "checkout_started"
   | "purchase";
 
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
 export interface LoginResponse {
   accessToken: string;
   user: {
@@ -61,4 +66,9 @@ export interface TrendResponse {
     pageViews: number;
     conversionRate: number;
   }>;
+}
+
+export interface ApiErrorResponse {
+  statusCode?: number;
+  message?: string;
 }

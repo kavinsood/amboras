@@ -52,7 +52,6 @@ export class RollupService {
       }
     }
 
-    const bucketDate = getBucketDate(dto.timestamp, store.timezone);
     const column = eventColumnMap[dto.event_type];
     const upsertStoreMetricsSql = `
       INSERT INTO store_daily_metrics (
@@ -61,7 +60,7 @@ export class RollupService {
         ${column},
         revenue_cents
       )
-      VALUES ($1, $2::date, 1, $3)
+      VALUES ($1, ($2::timestamptz AT TIME ZONE $3)::date, 1, $4)
       ON CONFLICT (store_id, bucket_date)
       DO UPDATE SET
         ${column} = store_daily_metrics.${column} + 1,
@@ -69,7 +68,8 @@ export class RollupService {
     `;
     const storeMetricsParams = [
       storeId,
-      bucketDate,
+      dto.timestamp,
+      store.timezone,
       dto.event_type === 'purchase' ? amountCents : 0,
     ];
 
@@ -91,13 +91,19 @@ export class RollupService {
         purchase_count,
         revenue_cents
       )
-      VALUES ($1, $2, $3::date, 1, $4)
+      VALUES ($1, $2, ($3::timestamptz AT TIME ZONE $4)::date, 1, $5)
       ON CONFLICT (store_id, product_id, bucket_date)
       DO UPDATE SET
         purchase_count = product_daily_revenue.purchase_count + 1,
         revenue_cents = product_daily_revenue.revenue_cents + EXCLUDED.revenue_cents
     `;
-    const productRevenueParams = [storeId, dto.data.product_id, bucketDate, amountCents];
+    const productRevenueParams = [
+      storeId,
+      dto.data.product_id,
+      dto.timestamp,
+      store.timezone,
+      amountCents,
+    ];
 
     if (client) {
       await client.query(upsertProductRevenueSql, productRevenueParams);
@@ -105,25 +111,4 @@ export class RollupService {
       await this.db.query(upsertProductRevenueSql, productRevenueParams);
     }
   }
-}
-
-function getBucketDate(timestamp: string, timeZone: string): string {
-  const date = new Date(timestamp);
-  const formatter = new Intl.DateTimeFormat('en-CA', {
-    timeZone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
-  const parts = formatter.formatToParts(date);
-
-  const year = parts.find((part) => part.type === 'year')?.value;
-  const month = parts.find((part) => part.type === 'month')?.value;
-  const day = parts.find((part) => part.type === 'day')?.value;
-
-  if (!year || !month || !day) {
-    throw new Error('Unable to derive bucket date');
-  }
-
-  return `${year}-${month}-${day}`;
 }

@@ -78,6 +78,8 @@ Notes:
 }
 ```
 
+`lastUpdatedAt` is the response generation timestamp for the aggregate payload. The UI treats this as the last successful fetch time, not as a persisted warehouse watermark.
+
 ### `GET /api/v1/analytics/top-products?range=month`
 
 ```json

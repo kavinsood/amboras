@@ -333,6 +333,37 @@ describe('App e2e', () => {
     });
   });
 
+  test('returns a trend series for the authenticated store', async () => {
+    const loginResponse = await request(app.getHttpServer())
+      .post('/api/v1/auth/login')
+      .send({
+        email: 'owner1@example.com',
+        password: 'password123',
+      });
+
+    const response = await request(app.getHttpServer())
+      .get('/api/v1/analytics/trend?days=14')
+      .set('Authorization', `Bearer ${loginResponse.body.accessToken}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.currency).toBe('USD');
+    expect(response.body.items).toHaveLength(2);
+    expect(response.body.items[0]).toEqual({
+      date: '2026-03-23',
+      revenueCents: 12000,
+      purchases: 3,
+      pageViews: 14,
+      conversionRate: 0.2143,
+    });
+    expect(response.body.items[1]).toEqual({
+      date: '2026-03-24',
+      revenueCents: 15700,
+      purchases: 4,
+      pageViews: 18,
+      conversionRate: 0.2222,
+    });
+  });
+
   test('rejects purchase events whose currency does not match the store currency', async () => {
     const loginResponse = await request(app.getHttpServer())
       .post('/api/v1/auth/login')

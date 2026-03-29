@@ -3,5 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "main": "src/contracts.ts"
+  "main": "src/contracts.ts",
+  "types": "src/contracts.ts",
+  "exports": {
+    ".": "./src/contracts.ts"
+  }
 }

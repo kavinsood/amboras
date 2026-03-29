@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "node node_modules/next/dist/bin/next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@store-analytics/shared": "workspace:*",
     "next": "15.1.6",
     "react": "19.0.0",
     "react-dom": "19.0.0"
