@@ -34,4 +34,9 @@ export class AnalyticsController {
   ) {
     return this.analyticsService.getTrend(request.user.storeId, query.days);
   }
+
+  @Get('live-visitors')
+  liveVisitors(@Req() request: { user: Express.User }) {
+    return this.analyticsService.getLiveVisitors(request.user.storeId);
+  }
 }

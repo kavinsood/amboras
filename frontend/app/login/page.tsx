@@ -9,7 +9,7 @@ export default function LoginPage() {
       title="Sign in and inspect a live store."
       description="The seeded demo account logs into the real Nest backend, stores a session locally, and opens a merchant dashboard backed by Postgres rollups."
       action={
-        <Link href="/" className="pill" style={{ color: "var(--text)" }}>
+        <Link href="/" className="ghost-button">
           Back to home
         </Link>
       }

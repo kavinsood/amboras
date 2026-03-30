@@ -1,9 +1,35 @@
-export function formatCurrency(amountCents: number, currency = "USD") {
+type CurrencyFormatOptions = {
+  minimumFractionDigits?: number;
+  maximumFractionDigits?: number;
+};
+
+export function formatCurrency(
+  amountCents: number,
+  currency = "USD",
+  options: CurrencyFormatOptions = {}
+) {
+  const { minimumFractionDigits = 2, maximumFractionDigits = 2 } = options;
+
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
-    maximumFractionDigits: 0
+    minimumFractionDigits,
+    maximumFractionDigits
   }).format(amountCents / 100);
+}
+
+export function formatNumber(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 0
+  }).format(value);
+}
+
+export function formatPercent(value: number, maximumFractionDigits = 2) {
+  return new Intl.NumberFormat("en-US", {
+    style: "percent",
+    maximumFractionDigits,
+    minimumFractionDigits: 0
+  }).format(value);
 }
 
 export function formatRelativeTime(input: string) {
@@ -25,4 +51,11 @@ export function formatRelativeTime(input: string) {
   }
 
   return `${Math.round(diffHours / 24)}d ago`;
+}
+
+export function formatClockTime(input: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit"
+  }).format(new Date(input));
 }

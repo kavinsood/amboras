@@ -11,6 +11,13 @@ export class DbService implements OnModuleDestroy {
   constructor(configService: ConfigService) {
     this.pool = new Pool({
       connectionString: configService.get<string>('DATABASE_URL'),
+      max: Number(configService.get<string>('PG_POOL_MAX') ?? 10),
+      idleTimeoutMillis: Number(
+        configService.get<string>('PG_POOL_IDLE_TIMEOUT_MS') ?? 30000,
+      ),
+      connectionTimeoutMillis: Number(
+        configService.get<string>('PG_POOL_CONNECTION_TIMEOUT_MS') ?? 2000,
+      ),
     });
   }
 

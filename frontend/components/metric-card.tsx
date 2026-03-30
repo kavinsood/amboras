@@ -2,19 +2,28 @@ type MetricCardProps = {
   label: string;
   value: string;
   delta: string;
-  tone?: "neutral" | "good" | "warn";
+  hint: string;
+  tone?: "neutral" | "good" | "accent";
 };
 
-export function MetricCard({ label, value, delta, tone = "neutral" }: MetricCardProps) {
-  const accent =
-    tone === "good" ? "var(--success)" : tone === "warn" ? "#b86b2a" : "var(--accent)";
+export function MetricCard({ label, value, delta, hint, tone = "neutral" }: MetricCardProps) {
+  const toneClass =
+    tone === "good"
+      ? "metric-card metric-card-good"
+      : tone === "accent"
+        ? "metric-card metric-card-accent"
+        : "metric-card";
 
   return (
-    <article className="card" style={{ padding: 20, minHeight: 128 }}>
-      <p style={{ margin: 0, color: "var(--muted)" }}>{label}</p>
-      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12 }}>
-        <strong style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)" }}>{value}</strong>
-        <span style={{ color: accent, fontWeight: 600 }}>{delta}</span>
+    <article className={toneClass}>
+      <div className="metric-card-head">
+        <p className="metric-card-label">{label}</p>
+        <span className="metric-card-delta">{delta}</span>
+      </div>
+      <strong className="metric-card-value">{value}</strong>
+      <p className="metric-card-hint">{hint}</p>
+      <div className="metric-card-rule" aria-hidden="true">
+        <span />
       </div>
     </article>
   );

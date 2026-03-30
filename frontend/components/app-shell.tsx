@@ -24,7 +24,7 @@ export function AppShell({ eyebrow, title, description, action, children }: AppS
             }}
           >
             <div style={{ maxWidth: 720, display: "grid", gap: 14 }}>
-              <div className="pill" style={{ width: "fit-content" }}>
+              <div className="chip" style={{ width: "fit-content" }}>
                 <strong>{eyebrow}</strong>
                 <span>Take-home starter</span>
               </div>
@@ -34,7 +34,7 @@ export function AppShell({ eyebrow, title, description, action, children }: AppS
               <p style={{ margin: 0, maxWidth: 640, fontSize: "1.05rem", color: "var(--muted)" }}>{description}</p>
             </div>
             <div className="hero-actions">
-              <Link href="/login" className="pill" style={{ color: "var(--text)" }}>
+              <Link href="/login" className="ghost-button">
                 Login
               </Link>
               {action}

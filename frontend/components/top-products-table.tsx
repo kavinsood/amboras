@@ -1,8 +1,11 @@
+import { EmptyState } from "@/components/empty-state";
+
 type TopProduct = {
   id: string;
   name: string;
   revenue: string;
   orders: number;
+  share: string;
 };
 
 type TopProductsTableProps = {
@@ -11,29 +14,44 @@ type TopProductsTableProps = {
 
 export function TopProductsTable({ items }: TopProductsTableProps) {
   if (items.length === 0) {
-    return <div className="empty-state">No product revenue yet for this time window.</div>;
+    return (
+      <EmptyState
+        compact
+        title="No ranked products yet"
+        message="Once purchase revenue lands for this window, the leading products will appear here."
+      />
+    );
   }
 
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr style={{ textAlign: "left", color: "var(--muted)" }}>
-            <th style={{ padding: "10px 8px" }}>Product</th>
-            <th style={{ padding: "10px 8px" }}>Orders</th>
-            <th style={{ padding: "10px 8px" }}>Revenue</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.id} style={{ borderTop: "1px solid var(--line)" }}>
-              <td style={{ padding: "14px 8px", fontWeight: 600 }}>{item.name}</td>
-              <td style={{ padding: "14px 8px" }}>{item.orders}</td>
-              <td style={{ padding: "14px 8px" }}>{item.revenue}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="table-shell" role="table" aria-label="Top products">
+      <div className="table-header-row" role="row">
+        <span role="columnheader">Product</span>
+        <span role="columnheader">Orders</span>
+        <span role="columnheader">Revenue</span>
+      </div>
+
+      <div className="table-body">
+        {items.map((item, index) => (
+          <div key={item.id} className="table-row" role="row">
+            <div className="table-product-cell">
+              <span className="table-rank">#{index + 1}</span>
+              <div>
+                <strong>{item.name}</strong>
+                <p>{item.share} of ranked revenue</p>
+              </div>
+            </div>
+            <div className="table-mobile-metric">
+              <span className="table-mobile-label">Orders</span>
+              <span className="table-number">{item.orders}</span>
+            </div>
+            <div className="table-mobile-metric">
+              <span className="table-mobile-label">Revenue</span>
+              <span className="table-revenue">{item.revenue}</span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

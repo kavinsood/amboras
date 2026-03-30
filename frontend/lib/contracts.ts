@@ -3,6 +3,7 @@ export type {
   EventType,
   LoginRequest,
   LoginResponse,
+  LiveVisitorsResponse,
   OverviewResponse,
   RecentActivityResponse,
   TopProductsResponse,

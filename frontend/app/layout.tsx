@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -7,14 +7,12 @@ const inter = Inter({
   variable: "--font-body"
 });
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-display"
-});
-
 export const metadata: Metadata = {
-  title: "Store Analytics Dashboard",
-  description: "A polished dashboard starter for store analytics."
+  title: "Store Analytics | Amboras",
+  description: "A real-time merchant analytics dashboard built for Amboras.",
+  icons: {
+    icon: "/favicon.svg"
+  }
 };
 
 export default function RootLayout({
@@ -23,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang="en" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

@@ -93,9 +93,12 @@ bun run dev
   - `events(store_id, occurred_at DESC)`
   - `events(store_id, event_type, occurred_at DESC)`
 - Unique `event_id` for idempotency
+- Explicit PostgreSQL pool limits and timeouts to avoid exhausting managed database connections
+- Rate limiting on `POST /api/v1/events` to reduce ingestion abuse
 - Pre-aggregated daily rollup tables for overview and top-products
 - PostgreSQL-native timezone bucketing in the rollup upserts using `AT TIME ZONE ... ::date`
 - Redis cache for overview, top-products, and trend with short TTLs
+- Redis HyperLogLog-backed live visitor counting for a lightweight real-time signal
 - Recent activity stays a bounded indexed query with `LIMIT 20`
 - Backend guards derive tenant scope from the authenticated user context instead of trusting a `store_id` query parameter
 
@@ -112,7 +115,8 @@ bun run dev
 - `GET /api/v1/analytics/overview`
 - `GET /api/v1/analytics/top-products?range=today|week|month`
 - `GET /api/v1/analytics/recent-activity`
-- `GET /api/v1/analytics/trend?days=14`
+- `GET /api/v1/analytics/trend?days=7|14|30`
+- `GET /api/v1/analytics/live-visitors`
 
 See also:
 - [docs/architecture.md](docs/architecture.md)
@@ -134,6 +138,7 @@ See also:
     - recent activity
 - Top-products ranges were verified for `today`, `week`, and `month`
 - Trend responses were verified for a 14-day window
+- Live visitor responses were verified through the authenticated analytics API
 
 ## Performance Notes
 The local seeded dataset currently contains:
@@ -159,6 +164,7 @@ Method:
 - Rollups are daily, so the design is optimized for this dashboard rather than arbitrary drilldowns.
 - Aggregates are updated synchronously on ingest. Under a flash sale for a single store, hot-row contention on the same daily rollup row would become a scaling limit.
 - Authentication is deliberately minimal for a take-home and assumes one primary store context per demo user.
+- The current ingest rate limiter is in-memory per app instance. In a multi-instance deployment, it should move to a shared store like Redis.
 - The current `event_id` uniqueness model assumes globally unique event IDs across stores. If upstream producers only guarantee store-local uniqueness, the constraint should become `(store_id, event_id)`.
 - Dashboard freshness messaging currently reflects the last successful fetch time, not a persisted database watermark.
 - There is no separate backfill/correction job yet for late-arriving events.
@@ -167,6 +173,7 @@ Method:
 - Add SSE for recent activity instead of polling
 - Add custom date-range filtering with validation
 - Add a buffered ingestion worker using Redis lists or streams
+- Move rate limiting to a distributed Redis-backed implementation
 - Extend automated coverage beyond the current auth/validation/tenant/duplicate-ingest checks
 - Expand the benchmark section with larger seeded datasets and `EXPLAIN ANALYZE`
 - Extend the metrics model toward visitor/session-based conversion

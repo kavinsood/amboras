@@ -10,29 +10,17 @@ type ErrorStateProps = {
 
 export function ErrorState({ title, message, actionLabel, actionHref, onRetry }: ErrorStateProps) {
   return (
-    <div className="card subtle-grid" style={{ padding: 24, borderColor: "rgba(184, 92, 56, 0.35)" }} role="alert">
-      <p style={{ margin: 0, color: "#b85c38", fontWeight: 700 }}>{title}</p>
-      <p style={{ margin: "10px 0 0", color: "var(--muted)" }}>{message}</p>
-      <div style={{ display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap" }}>
+    <div className="error-state" role="alert">
+      <p className="error-state-title">{title}</p>
+      <p className="error-state-copy">{message}</p>
+      <div className="error-state-actions">
         {onRetry ? (
-          <button
-            onClick={onRetry}
-            type="button"
-            style={{
-              padding: "10px 16px",
-              borderRadius: 999,
-              border: 0,
-              background: "linear-gradient(90deg, var(--accent), #dd8659)",
-              color: "white",
-              fontWeight: 700,
-              cursor: "pointer"
-            }}
-          >
+          <button onClick={onRetry} type="button" className="primary-button">
             Retry
           </button>
         ) : null}
         {actionLabel && actionHref ? (
-          <Link href={actionHref} className="pill" style={{ color: "var(--text)" }}>
+          <Link href={actionHref} className="ghost-button ghost-button-strong">
             {actionLabel}
           </Link>
         ) : null}

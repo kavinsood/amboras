@@ -1,8 +1,11 @@
+import { EmptyState } from "@/components/empty-state";
+
 type ActivityItem = {
   id: string;
   label: string;
   detail: string;
   timestamp: string;
+  tone: "accent" | "success" | "neutral";
 };
 
 type ActivityListProps = {
@@ -11,27 +14,28 @@ type ActivityListProps = {
 
 export function ActivityList({ items }: ActivityListProps) {
   if (items.length === 0) {
-    return <div className="empty-state">No recent activity yet. New events will appear here as soon as they are ingested.</div>;
+    return (
+      <EmptyState
+        compact
+        title="No recent activity"
+        message="New events will stream into this feed as soon as they are ingested."
+      />
+    );
   }
 
   return (
-    <div style={{ display: "grid", gap: 12 }}>
+    <div className="activity-feed">
       {items.map((item) => (
-        <div
-          key={item.id}
-          style={{
-            padding: 14,
-            borderRadius: 18,
-            border: "1px solid var(--line)",
-            background: "rgba(255,255,255,0.6)"
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 16 }}>
-            <strong style={{ textTransform: "capitalize" }}>{item.label.replace(/_/g, " ")}</strong>
-            <span style={{ color: "var(--muted)" }}>{item.timestamp}</span>
+        <article key={item.id} className="activity-row">
+          <div className={`activity-marker activity-marker-${item.tone}`} aria-hidden="true" />
+          <div className="activity-copy">
+            <div className="activity-copy-head">
+              <strong>{item.label}</strong>
+              <span>{item.timestamp}</span>
+            </div>
+            <p>{item.detail}</p>
           </div>
-          <p style={{ margin: "6px 0 0", color: "var(--muted)" }}>{item.detail}</p>
-        </div>
+        </article>
       ))}
     </div>
   );

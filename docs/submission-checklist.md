@@ -16,7 +16,8 @@
 - [ ] Overview shows revenue, event counts, and conversion rate
 - [ ] Top products works for `today`, `week`, and `month`
 - [ ] Recent activity shows the latest 20 events
-- [ ] Trend chart renders for the last 14 days
+- [ ] Trend chart switches cleanly between `7`, `14`, and `30` days
+- [ ] Live visitors badge loads without breaking the dashboard
 - [ ] Ingesting a purchase event updates the dashboard on refresh/poll
 
 ## Backend Review Points

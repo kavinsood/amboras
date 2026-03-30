@@ -23,6 +23,7 @@ describe('EventsService', () => {
     let transactionCalls = 0;
 
     const service = new EventsService(
+      { pfadd: async () => undefined, expire: async () => undefined } as never,
       {
         withTransaction: async () => {
           transactionCalls += 1;
@@ -43,6 +44,7 @@ describe('EventsService', () => {
     let rollupCalls = 0;
 
     const service = new EventsService(
+      { pfadd: async () => undefined, expire: async () => undefined } as never,
       {
         withTransaction: async (
           operation: (client: unknown) => Promise<unknown>,

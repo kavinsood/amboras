@@ -68,6 +68,10 @@ export interface TrendResponse {
   }>;
 }
 
+export interface LiveVisitorsResponse {
+  count: number;
+}
+
 export interface ApiErrorResponse {
   statusCode?: number;
   message?: string;

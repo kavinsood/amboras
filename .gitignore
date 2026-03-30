@@ -13,3 +13,6 @@ redis-data
 backend/.env
 frontend/.env.local
 review-repomix-output.xml
+.agents
+.tmp
+skills-lock.json

@@ -14,7 +14,7 @@ export function LoginForm() {
 
   return (
     <form
-      style={{ display: "grid", gap: 16 }}
+      className="form-stack"
       onSubmit={async (event) => {
         event.preventDefault();
         setStatus("loading");
@@ -35,12 +35,12 @@ export function LoginForm() {
         }
       }}
     >
-      <div className="pill" style={{ justifyContent: "space-between" }}>
+      <div className="chip" style={{ justifyContent: "space-between" }}>
         <span>Seeded demo account</span>
         <strong>owner1@example.com / password123</strong>
       </div>
 
-      <label style={{ display: "grid", gap: 8 }}>
+      <label className="form-label">
         <span>Email</span>
         <input
           type="email"
@@ -48,16 +48,11 @@ export function LoginForm() {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="owner@example.com"
-          style={{
-            padding: "12px 14px",
-            borderRadius: 14,
-            border: "1px solid var(--line)",
-            background: "white"
-          }}
+          className="form-input"
         />
       </label>
 
-      <label style={{ display: "grid", gap: 8 }}>
+      <label className="form-label">
         <span>Password</span>
         <input
           type="password"
@@ -65,35 +60,21 @@ export function LoginForm() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           placeholder="password123"
-          style={{
-            padding: "12px 14px",
-            borderRadius: 14,
-            border: "1px solid var(--line)",
-            background: "white"
-          }}
+          className="form-input"
         />
       </label>
 
       <button
         type="submit"
         disabled={status === "loading"}
-        style={{
-          padding: "12px 16px",
-          border: 0,
-          borderRadius: 999,
-          background: "linear-gradient(90deg, var(--accent), #dd8659)",
-          color: "white",
-          fontWeight: 700,
-          cursor: "pointer",
-          opacity: status === "loading" ? 0.72 : 1
-        }}
+        className="primary-button auth-submit"
       >
         {status === "loading" ? "Signing in..." : "Sign in"}
       </button>
 
       {error ? (
-        <div className="card" style={{ padding: 16, borderColor: "rgba(184, 92, 56, 0.35)", background: "rgba(255,255,255,0.72)" }}>
-          <strong style={{ color: "#b85c38" }}>Sign-in failed</strong>
+        <div className="error-state" style={{ padding: 16 }}>
+          <strong className="error-state-title">Sign-in failed</strong>
           <p style={{ margin: "8px 0 0", color: "var(--muted)" }}>
             {error} Check the backend is running, then try the seeded demo account again.
           </p>

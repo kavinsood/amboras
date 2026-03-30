@@ -10,6 +10,10 @@ export class AnalyticsService {
     private readonly cacheService: CacheService,
   ) {}
 
+  private liveVisitorsKey(storeId: string) {
+    return `analytics:live-visitors:${storeId}`;
+  }
+
   async getOverview(storeId: string) {
     const cacheKey = `analytics:overview:${storeId}`;
     const cached = await this.cacheService.getJson<Awaited<ReturnType<AnalyticsRepository['getOverview']>>>(cacheKey);
@@ -51,5 +55,17 @@ export class AnalyticsService {
     const result = await this.analyticsRepository.getTrend(storeId, days);
     await this.cacheService.setJson(cacheKey, result, 15);
     return result;
+  }
+
+  async getLiveVisitors(storeId: string) {
+    return {
+      count: await this.cacheService.pfcount(this.liveVisitorsKey(storeId)),
+    };
+  }
+
+  async trackLiveVisitor(storeId: string, visitorId: string) {
+    const key = this.liveVisitorsKey(storeId);
+    await this.cacheService.pfadd(key, visitorId);
+    await this.cacheService.expire(key, 300);
   }
 }

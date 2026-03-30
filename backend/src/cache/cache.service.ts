@@ -51,6 +51,33 @@ export class CacheService implements OnModuleDestroy {
     }
   }
 
+  async pfadd(key: string, member: string): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.client.pfadd(key, member);
+    } catch {
+      return;
+    }
+  }
+
+  async pfcount(key: string): Promise<number> {
+    try {
+      await this.ensureConnection();
+      return await this.client.pfcount(key);
+    } catch {
+      return 0;
+    }
+  }
+
+  async expire(key: string, ttlSeconds: number): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.client.expire(key, ttlSeconds);
+    } catch {
+      return;
+    }
+  }
+
   async onModuleDestroy() {
     try {
       if (this.client.status !== 'end') {

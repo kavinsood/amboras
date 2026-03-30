@@ -2,6 +2,7 @@ import type {
   ApiErrorResponse,
   LoginRequest,
   LoginResponse,
+  LiveVisitorsResponse,
   OverviewResponse,
   RecentActivityResponse,
   TrendResponse,
@@ -77,6 +78,12 @@ export function getRecentActivity(token?: string) {
 
 export function getTrend(token?: string, days = 14) {
   return fetchJson<TrendResponse>(`/api/v1/analytics/trend?days=${days}`, {
+    headers: withAuthHeaders(token)
+  });
+}
+
+export function getLiveVisitors(token?: string) {
+  return fetchJson<LiveVisitorsResponse>("/api/v1/analytics/live-visitors", {
     headers: withAuthHeaders(token)
   });
 }

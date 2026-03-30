@@ -130,9 +130,20 @@ Notes:
 }
 ```
 
+The `days` query parameter accepts `7`, `14`, or `30`.
+
+### `GET /api/v1/analytics/live-visitors`
+
+```json
+{
+  "count": 12
+}
+```
+
 ## Error Contracts
 - `400` invalid input
 - `401` unauthenticated
 - `403` unauthorized store access
 - `409` duplicate event id
+- `429` too many ingestion requests
 - `500` unexpected server error
