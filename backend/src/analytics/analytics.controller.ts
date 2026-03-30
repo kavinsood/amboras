@@ -36,7 +36,22 @@ export class AnalyticsController {
   }
 
   @Get('live-visitors')
-  liveVisitors(@Req() request: { user: Express.User }) {
-    return this.analyticsService.getLiveVisitors(request.user.storeId);
+  liveVisitors(
+    @Req()
+    request: {
+      user: Express.User;
+      ip?: string;
+      headers?: Record<string, string | string[] | undefined>;
+    },
+  ) {
+    const forwardedVisitorId = request.headers?.['x-visitor-id'];
+    const visitorId = Array.isArray(forwardedVisitorId)
+      ? forwardedVisitorId[0]
+      : forwardedVisitorId ?? request.user.id ?? request.ip ?? null;
+
+    return this.analyticsService.getLiveVisitors(
+      request.user.storeId,
+      visitorId,
+    );
   }
 }

@@ -8,6 +8,7 @@ import type {
   TrendResponse,
   TopProductsResponse
 } from "@/lib/contracts";
+import { readOrCreateVisitorId } from "@/lib/auth";
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
 
@@ -83,7 +84,11 @@ export function getTrend(token?: string, days = 14) {
 }
 
 export function getLiveVisitors(token?: string) {
+  const visitorId = readOrCreateVisitorId();
   return fetchJson<LiveVisitorsResponse>("/api/v1/analytics/live-visitors", {
-    headers: withAuthHeaders(token)
+    headers: {
+      ...withAuthHeaders(token),
+      ...(visitorId ? { "X-Visitor-Id": visitorId } : {})
+    }
   });
 }

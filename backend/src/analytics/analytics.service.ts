@@ -57,7 +57,11 @@ export class AnalyticsService {
     return result;
   }
 
-  async getLiveVisitors(storeId: string) {
+  async getLiveVisitors(storeId: string, visitorId?: string | null) {
+    if (visitorId) {
+      await this.trackLiveVisitor(storeId, visitorId);
+    }
+
     return {
       count: await this.cacheService.pfcount(this.liveVisitorsKey(storeId)),
     };
