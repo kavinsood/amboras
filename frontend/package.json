@@ -11,19 +11,19 @@
   },
   "dependencies": {
     "@store-analytics/shared": "workspace:*",
-    "next": "15.1.6",
+    "next": "16.2.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "recharts": "^3.8.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@next/eslint-plugin-next": "15.1.6",
+    "@next/eslint-plugin-next": "16.2.1",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "eslint": "^9.21.0",
-    "eslint-config-next": "15.1.6",
+    "eslint-config-next": "16.2.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "typescript": "^5.8.2"
